@@ -11,8 +11,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Question {
     @Id
+    @Column(name = "question_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long questionId;
 
     @Column(name = "content")
     private String content;
@@ -20,9 +21,9 @@ public class Question {
     @Column(name = "role_id")
     private Long roleId;
 
-    @ManyToOne
-    @Column(name = "sf_id")
-    private SoftFactor sfId;
+    @ManyToOne(optional = false, targetEntity = SoftFactor.class)
+    @JoinColumn(name = "sf_id", referencedColumnName = "sf_id")
+    private SoftFactor softFactor;
 
     @Column(name = "type")
     private QType type;

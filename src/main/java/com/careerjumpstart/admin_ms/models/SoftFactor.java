@@ -7,8 +7,9 @@ import javax.persistence.*;
 public class SoftFactor {
 
     @Id
+    @Column(name = "sf_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long sfId;
 
     @Column(name = "title")
     private String title;
