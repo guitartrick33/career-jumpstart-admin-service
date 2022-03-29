@@ -9,4 +9,6 @@ public class SoftFactor {
     @Id
     private Long id;
 
+    private String description;
+
 }
