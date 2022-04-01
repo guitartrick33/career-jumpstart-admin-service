@@ -1,9 +1,14 @@
 package com.careerjumpstart.admin_ms.models;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "soft_factors")
+@AllArgsConstructor
+@NoArgsConstructor
 public class SoftFactor {
 
     @Id

@@ -4,9 +4,11 @@ import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.models.SoftFactor;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
 import com.careerjumpstart.admin_ms.repository.SoftFactorRepo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SoftFactorServiceImpl implements SoftFactorService{
 
     private final SoftFactorRepo softFactorRepo;
@@ -23,5 +25,10 @@ public class SoftFactorServiceImpl implements SoftFactorService{
     @Override
     public SoftFactor findById(Long id) {
         return softFactorRepo.findSoftFactorBySfId(id);
+    }
+
+    @Override
+    public SoftFactor createSF(SoftFactor sf) {
+        return softFactorRepo.save(sf);
     }
 }
