@@ -1,12 +1,11 @@
 package com.careerjumpstart.admin_ms.service;
 
-import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.models.SoftFactor;
-import com.careerjumpstart.admin_ms.repository.QuestionRepo;
 import com.careerjumpstart.admin_ms.repository.SoftFactorRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SoftFactorServiceImpl implements SoftFactorService{
@@ -23,12 +22,30 @@ public class SoftFactorServiceImpl implements SoftFactorService{
     }
 
     @Override
-    public SoftFactor findById(Long id) {
+    public Optional<SoftFactor> findById(Long id) {
         return softFactorRepo.findSoftFactorBySfId(id);
     }
 
     @Override
-    public SoftFactor createSF(SoftFactor sf) {
-        return softFactorRepo.save(sf);
+    public SoftFactor createS(SoftFactor s) {
+        return softFactorRepo.save(s);
+    }
+
+    @Override
+    public SoftFactor updateS(Long id, SoftFactor s) {
+        Optional<SoftFactor> softFactor = findById(id);
+        if(softFactor.isPresent()){
+            softFactor.get().setTitle(s.getTitle());
+            return softFactorRepo.save(softFactor.get());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteS(Long id) {
+        softFactorRepo.deleteById(id);
     }
 }

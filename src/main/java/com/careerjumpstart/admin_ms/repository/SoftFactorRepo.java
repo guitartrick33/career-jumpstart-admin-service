@@ -5,8 +5,14 @@ import com.careerjumpstart.admin_ms.models.SoftFactor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SoftFactorRepo extends JpaRepository<SoftFactor, Long> {
+    @Override
     List<SoftFactor> findAll();
-    SoftFactor findSoftFactorBySfId(Long sfId);
+
+    Optional<SoftFactor> findSoftFactorBySfId(Long sfId);
+
+    @Override
+    <S extends SoftFactor> S save(S entity);
 }
