@@ -22,6 +22,6 @@ public class SoftFactorServiceImpl implements SoftFactorService{
 
     @Override
     public SoftFactor findById(Long id) {
-        return softFactorRepo.findSoftFactorById(id);
+        return softFactorRepo.findSoftFactorBySfId(id);
     }
 }

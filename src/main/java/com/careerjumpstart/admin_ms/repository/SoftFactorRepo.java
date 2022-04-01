@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SoftFactorRepo extends JpaRepository<SoftFactor, Long> {
     List<SoftFactor> findAll();
-    SoftFactor findSoftFactorById(Long id);
+    SoftFactor findSoftFactorBySfId(Long sfId);
 }

@@ -8,7 +8,7 @@ public class Answer {
     @Id
     @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long answerId;
 
     @Column(name = "content")
     private String content;

@@ -22,6 +22,6 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer findById(Long id) {
-        return answerRepo.findAnswerById(id);
+        return answerRepo.findAnswerByAnswerId(id);
     }
 }
