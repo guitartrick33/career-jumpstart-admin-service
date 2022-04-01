@@ -2,10 +2,10 @@ package com.careerjumpstart.admin_ms.service;
 
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -22,7 +22,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Question findById(Long id) {
+    public Optional<Question> findById(Long id) {
         return questionRepo.findQuestionByQuestionId(id);
     }
 
