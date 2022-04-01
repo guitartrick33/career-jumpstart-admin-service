@@ -31,5 +31,23 @@ public class QuestionServiceImpl implements QuestionService{
         return questionRepo.save(q);
     }
 
+    @Override
+    public Question updateQ(Long id, Question q) {
+        Optional<Question> question = findById(id);
+        if(question.isPresent()){
+            question.get().setContent(q.getContent());
+            return questionRepo.save(question.get());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteQ(Long id) {
+        questionRepo.deleteById(id);
+    }
+
 
 }
