@@ -8,4 +8,5 @@ import java.util.List;
 public interface SoftFactorService {
     List<SoftFactor> findAll();
     SoftFactor findById(Long id);
+    SoftFactor createSF(SoftFactor sf);
 }

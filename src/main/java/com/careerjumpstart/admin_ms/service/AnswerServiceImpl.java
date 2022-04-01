@@ -4,9 +4,11 @@ import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.AnswerRepo;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AnswerServiceImpl implements AnswerService {
 
     private final AnswerRepo answerRepo;
