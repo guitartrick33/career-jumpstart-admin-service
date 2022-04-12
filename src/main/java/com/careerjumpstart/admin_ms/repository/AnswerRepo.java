@@ -5,8 +5,10 @@ import com.careerjumpstart.admin_ms.models.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerRepo extends JpaRepository<Answer, Long> {
     List<Answer> findAll();
-    Answer findAnswerByAnswerId(Long id);
+    Optional<Answer> findAnswerByAnswerId(Long id);
+    Optional<Answer> findAnswerByQuestionId_questionId(Long id);
 }
