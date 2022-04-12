@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.controllers;
 
+import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.SoftFactor;
 import com.careerjumpstart.admin_ms.service.SoftFactorService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class SoftFactorController {
     public Optional<SoftFactor> getById(@PathVariable Long id){
         return softFactorService.findById(id);
     }
+
+
 
     @PostMapping(path="/create")
     public SoftFactor postSoftFactor(@RequestBody SoftFactor softFactor){

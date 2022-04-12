@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,9 +36,7 @@ public class Question {
     @Column(name = "type")
     private QType type;
 
-    @Column(name = "user_type")
-    private QTypeUser userType;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "questionId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

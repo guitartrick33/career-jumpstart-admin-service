@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.controllers;
 
+import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.QType;
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.models.SoftFactor;
@@ -36,6 +37,12 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.FOUND)
     public Optional<Question> getById(@PathVariable Long id){
         return questionService.findById(id);
+    }
+
+    @GetMapping(path = "/softfactor/{id}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public Optional <List<Question>> getByQuestionId(@PathVariable Long id){
+        return questionService.findBySfId(id);
     }
 
     @PostMapping(path="/create")

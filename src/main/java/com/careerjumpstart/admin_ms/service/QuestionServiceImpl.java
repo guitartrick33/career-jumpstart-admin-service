@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.service;
 
+import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Optional<Question> findById(Long id) {
         return questionRepo.findQuestionByQuestionId(id);
+    }
+
+    @Override
+    public Optional <List<Question>> findBySfId(Long id) {
+        return questionRepo.findQuestionBySfId_SfId(id);
     }
 
     @Override

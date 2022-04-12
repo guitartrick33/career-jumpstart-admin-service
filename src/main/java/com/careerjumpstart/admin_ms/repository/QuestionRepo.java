@@ -13,6 +13,7 @@ public interface QuestionRepo extends JpaRepository<Question, Long> {
     List<Question> findAll();
 
     Optional<Question> findQuestionByQuestionId(Long questionId);
+    Optional <List<Question>> findQuestionBySfId_SfId(Long sfId);
 
     @Override
     <S extends Question> S save(S entity);

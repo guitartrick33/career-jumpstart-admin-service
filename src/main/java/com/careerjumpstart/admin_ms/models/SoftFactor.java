@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,8 @@ public class SoftFactor {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(mappedBy = "sfId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SoftFactor> softFactors;
+    @JsonIgnore
+    @OneToMany(mappedBy = "sfId",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Question> questions;
 
 }
