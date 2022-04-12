@@ -1,19 +1,11 @@
 package com.careerjumpstart.admin_ms.controllers;
 
-import com.careerjumpstart.admin_ms.models.Answer;
-import com.careerjumpstart.admin_ms.models.QType;
 import com.careerjumpstart.admin_ms.models.Question;
-import com.careerjumpstart.admin_ms.models.SoftFactor;
 import com.careerjumpstart.admin_ms.service.QuestionService;
-import com.careerjumpstart.admin_ms.service.SoftFactorService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +13,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-@RequestMapping("/admin/question")
+@RequestMapping("/question")
 public class QuestionController {
 
     @Autowired
@@ -39,24 +31,24 @@ public class QuestionController {
         return questionService.findById(id);
     }
 
-    @GetMapping(path = "/softfactor/{id}")
+    @GetMapping(path = "/", params = "softFactorId")
     @ResponseStatus(HttpStatus.FOUND)
-    public Optional <List<Question>> getByQuestionId(@PathVariable Long id){
-        return questionService.findBySfId(id);
+    public Optional <List<Question>> getQuestionsBySoftFactorId(@RequestParam Long softFactorId){
+        return questionService.findBySoftFactorId(softFactorId);
     }
 
-    @PostMapping(path="/create")
+    @PostMapping(path="/")
     public Question postQuestion(@RequestBody Question question){
-        return questionService.createQ(question);
+        return questionService.createQuestion(question);
     }
 
-    @PutMapping(path="/edit/{id}")
+    @PutMapping(path="/{id}")
     public Question editQuestion(@RequestBody Question question, @PathVariable Long id){
-        return questionService.updateQ(id,question);
+        return questionService.updateQuestion(id,question);
     }
 
-    @DeleteMapping(path="/delete/{id}")
+    @DeleteMapping(path="/{id}")
     public void deleteQuestion(@PathVariable Long id){
-       questionService.deleteQ(id);
+       questionService.deleteQuestion(id);
     }
 }

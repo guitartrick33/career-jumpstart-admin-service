@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface SoftFactorService {
     List<SoftFactor> findAll();
     Optional<SoftFactor> findById(Long id);
-    SoftFactor createS(SoftFactor s);
-    SoftFactor updateS(Long id, SoftFactor s);
-    void deleteS(Long id);
+    SoftFactor createSoftFactor(SoftFactor s);
+    SoftFactor updateSoftFactor(Long id, SoftFactor s);
+    void deleteSoftFactor(Long id);
 }

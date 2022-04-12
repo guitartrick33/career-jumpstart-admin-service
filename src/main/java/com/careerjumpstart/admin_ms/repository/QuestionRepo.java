@@ -1,6 +1,7 @@
 package com.careerjumpstart.admin_ms.repository;
 
 import com.careerjumpstart.admin_ms.models.Question;
+import com.careerjumpstart.admin_ms.models.SoftFactor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,8 +13,11 @@ public interface QuestionRepo extends JpaRepository<Question, Long> {
     @Override
     List<Question> findAll();
 
-    Optional<Question> findQuestionByQuestionId(Long questionId);
-    Optional <List<Question>> findQuestionBySfId_SfId(Long sfId);
+//    Optional<Question> findQuestionById(Long id);
+    Optional<Question> findQuestionById(Long id);
+
+    Optional <List<Question>> findAllBySoftFactorId(Long softFactorId);
+    //Optional <List<Question>> findQuestionBySoftFactor_IOrderBySfId(Long id);
 
     @Override
     <S extends Question> S save(S entity);

@@ -4,6 +4,7 @@ import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.AnswerRepo;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
+    @Autowired
     private final AnswerRepo answerRepo;
 
     public AnswerServiceImpl(AnswerRepo answerRepo) {
@@ -25,21 +27,21 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Optional<Answer> findById(Long id) {
-        return answerRepo.findAnswerByAnswerId(id);
+        return answerRepo.findAnswerById(id);
     }
 
     @Override
-    public Optional<Answer> findByQuestionId(Long id) {
-        return answerRepo.findAnswerByQuestionId_questionId(id);
+    public Optional<Answer> findByQuestionId(Long questionId) {
+        return answerRepo.findAnswerByQuestionId(questionId);
     }
 
     @Override
-    public Answer createA(Answer a) {
+    public Answer createAnswer(Answer a) {
         return answerRepo.save(a);
     }
 
     @Override
-    public Answer updateA(Long id, Answer a) {
+    public Answer updateAnswer(Long id, Answer a) {
         Optional<Answer> answer = findById(id);
         if(answer.isPresent()){
             answer.get().setContent(a.getContent());
@@ -52,7 +54,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void deleteA(Long id) {
+    public void deleteAnswer(Long id) {
         answerRepo.deleteById(id);
     }
 }

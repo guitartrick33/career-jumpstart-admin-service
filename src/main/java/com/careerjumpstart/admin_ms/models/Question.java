@@ -19,9 +19,9 @@ import java.util.Set;
 public class Question {
 
     @Id
-    @Column(name = "question_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long questionId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -30,13 +30,13 @@ public class Question {
     private Long roleId;
 
     @ManyToOne(optional = false, targetEntity = SoftFactor.class)
-    @JoinColumn(name = "sf_id", referencedColumnName = "sf_id")
-    private SoftFactor sfId;
+    @JoinColumn(name = "soft_factor_id", referencedColumnName = "id")
+    private SoftFactor softFactor;
 
     @Column(name = "type")
     private QType type;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "questionId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface AnswerService {
     List<Answer> findAll();
     Optional<Answer> findById(Long id);
-    Optional<Answer> findByQuestionId(Long id);
-    Answer createA(Answer a);
-    Answer updateA(Long id, Answer a);
-    void deleteA(Long id);
+    Optional<Answer> findByQuestionId(Long questionId);
+    Answer createAnswer(Answer a);
+    Answer updateAnswer(Long id, Answer a);
+    void deleteAnswer(Long id);
 }

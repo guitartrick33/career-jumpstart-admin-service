@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public interface AnswerRepo extends JpaRepository<Answer, Long> {
     List<Answer> findAll();
-    Optional<Answer> findAnswerByAnswerId(Long id);
-    Optional<Answer> findAnswerByQuestionId_questionId(Long id);
+
+    Optional<Answer> findAnswerById(Long id);
+    Optional<Answer> findAnswerByQuestionId(Long questionId);
+
+//    Optional<Answer> findAnswerByAnswerId(Long id);
+//    Optional<Answer> findAnswerByQuestionId_questionId(Long id);
 }

@@ -1,8 +1,8 @@
 package com.careerjumpstart.admin_ms.service;
 
-import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.QuestionRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.Optional;
 @Service
 public class QuestionServiceImpl implements QuestionService{
 
+    @Autowired
     private final QuestionRepo questionRepo;
 
     public QuestionServiceImpl(QuestionRepo questionRepo) {
@@ -24,21 +25,21 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public Optional<Question> findById(Long id) {
-        return questionRepo.findQuestionByQuestionId(id);
+        return questionRepo.findQuestionById(id);
     }
 
     @Override
-    public Optional <List<Question>> findBySfId(Long id) {
-        return questionRepo.findQuestionBySfId_SfId(id);
+    public Optional <List<Question>> findBySoftFactorId(Long softFactorId) {
+        return questionRepo.findAllBySoftFactorId(softFactorId);
     }
 
     @Override
-    public Question createQ(Question q) {
+    public Question createQuestion(Question q) {
         return questionRepo.save(q);
     }
 
     @Override
-    public Question updateQ(Long id, Question q) {
+    public Question updateQuestion(Long id, Question q) {
         Optional<Question> question = findById(id);
         if(question.isPresent()){
             question.get().setContent(q.getContent());
@@ -51,7 +52,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public void deleteQ(Long id) {
+    public void deleteQuestion(Long id) {
         questionRepo.deleteById(id);
     }
 

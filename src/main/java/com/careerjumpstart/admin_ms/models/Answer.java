@@ -15,16 +15,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Answer {
     @Id
-    @Column(name = "answer_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answerId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(optional = false, targetEntity = Question.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-    private Question questionId;
+    @ManyToOne(optional = false, targetEntity = Question.class)
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    private Question question;
 
     @Column(name = "user_id")
     private Long userId;

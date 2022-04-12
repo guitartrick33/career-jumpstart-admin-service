@@ -18,15 +18,15 @@ import java.util.List;
 public class SoftFactor {
 
     @Id
-    @Column(name = "sf_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sfId;
+    private Long id;
 
     @Column(name = "title")
     private String title;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "sfId",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Question> questions;
 
 }

@@ -1,9 +1,9 @@
 package com.careerjumpstart.admin_ms.controllers;
 
-import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.models.SoftFactor;
 import com.careerjumpstart.admin_ms.service.SoftFactorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +13,11 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-@RequestMapping("/admin/softfactor")
+@RequestMapping("/softfactor")
 public class SoftFactorController {
 
-    private final SoftFactorService softFactorService;
+    @Autowired
+    private SoftFactorService softFactorService;
 
     @GetMapping(path="/")
     @ResponseStatus(HttpStatus.OK)
@@ -32,18 +33,18 @@ public class SoftFactorController {
 
 
 
-    @PostMapping(path="/create")
+    @PostMapping(path="/")
     public SoftFactor postSoftFactor(@RequestBody SoftFactor softFactor){
-        return softFactorService.createS(softFactor);
+        return softFactorService.createSoftFactor(softFactor);
     }
 
-    @PutMapping(path="/edit/{id}")
+    @PutMapping(path="/{id}")
     public SoftFactor editSoftFactor(@RequestBody SoftFactor softFactor, @PathVariable Long id){
-        return softFactorService.updateS(id,softFactor);
+        return softFactorService.updateSoftFactor(id,softFactor);
     }
 
-    @DeleteMapping(path="/delete/{id}")
+    @DeleteMapping(path="/{id}")
     public void deleteSoftFactor(@PathVariable Long id){
-        softFactorService.deleteS(id);
+        softFactorService.deleteSoftFactor(id);
     }
 }
