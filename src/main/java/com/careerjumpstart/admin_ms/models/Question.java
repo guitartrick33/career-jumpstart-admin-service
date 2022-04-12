@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -33,6 +35,9 @@ public class Question {
     @Column(name = "type")
     private QType type;
 
+    @Column(name = "user_type")
+    private QTypeUser userType;
 
-
+    @OneToMany(mappedBy = "questionId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Answer> answers;
 }

@@ -22,10 +22,9 @@ public class Answer {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(optional = false, targetEntity = Question.class)
+    @ManyToOne(optional = false, targetEntity = Question.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private Question questionId;
-
 
     @Column(name = "user_id")
     private Long userId;
