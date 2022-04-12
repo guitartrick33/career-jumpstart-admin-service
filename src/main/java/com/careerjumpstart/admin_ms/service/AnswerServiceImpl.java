@@ -7,6 +7,7 @@ import com.careerjumpstart.admin_ms.repository.QuestionRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -23,7 +24,35 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Answer findById(Long id) {
+    public Optional<Answer> findById(Long id) {
         return answerRepo.findAnswerByAnswerId(id);
+    }
+
+    @Override
+    public Optional<Answer> findByQuestionId(Long id) {
+        return answerRepo.findAnswerByQuestionId_questionId(id);
+    }
+
+    @Override
+    public Answer createA(Answer a) {
+        return answerRepo.save(a);
+    }
+
+    @Override
+    public Answer updateA(Long id, Answer a) {
+        Optional<Answer> answer = findById(id);
+        if(answer.isPresent()){
+            answer.get().setContent(a.getContent());
+            return answerRepo.save(answer.get());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteA(Long id) {
+        answerRepo.deleteById(id);
     }
 }
