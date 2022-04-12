@@ -24,7 +24,7 @@ public class SoftFactor {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(mappedBy = "softFactor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sfId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SoftFactor> softFactors;
 
 }

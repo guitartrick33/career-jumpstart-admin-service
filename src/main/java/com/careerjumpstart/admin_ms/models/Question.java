@@ -30,7 +30,7 @@ public class Question {
 
     @ManyToOne(optional = false, targetEntity = SoftFactor.class)
     @JoinColumn(name = "sf_id", referencedColumnName = "sf_id")
-    private SoftFactor softFactor;
+    private SoftFactor sfId;
 
     @Column(name = "type")
     private QType type;
