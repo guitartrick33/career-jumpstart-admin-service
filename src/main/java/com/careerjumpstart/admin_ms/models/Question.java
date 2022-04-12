@@ -33,4 +33,6 @@ public class Question {
     @Column(name = "type")
     private QType type;
 
+
+
 }

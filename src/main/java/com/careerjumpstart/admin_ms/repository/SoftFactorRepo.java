@@ -14,5 +14,5 @@ public interface SoftFactorRepo extends JpaRepository<SoftFactor, Long> {
     Optional<SoftFactor> findSoftFactorBySfId(Long sfId);
 
     @Override
-    <S extends SoftFactor> S save(S entity);
+    <F extends SoftFactor> F save(F entity);
 }

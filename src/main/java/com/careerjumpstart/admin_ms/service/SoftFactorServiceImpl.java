@@ -27,8 +27,8 @@ public class SoftFactorServiceImpl implements SoftFactorService{
     }
 
     @Override
-    public SoftFactor createS(SoftFactor s) {
-        return softFactorRepo.save(s);
+    public SoftFactor createS(SoftFactor softFactor) {
+        return softFactorRepo.save(softFactor);
     }
 
     @Override
