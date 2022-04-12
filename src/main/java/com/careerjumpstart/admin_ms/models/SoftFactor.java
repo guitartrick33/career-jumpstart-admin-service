@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,5 +23,8 @@ public class SoftFactor {
 
     @Column(name = "title")
     private String title;
+
+    @OneToMany(mappedBy = "softFactor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SoftFactor> softFactors;
 
 }
