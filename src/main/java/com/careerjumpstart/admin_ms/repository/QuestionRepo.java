@@ -18,6 +18,7 @@ public interface QuestionRepo extends JpaRepository<Question, Long> {
 
     Optional <List<Question>> findAllBySoftFactorId(Long softFactorId);
     //Optional <List<Question>> findQuestionBySoftFactor_IOrderBySfId(Long id);
+    Optional <List<Question>> findAllBySoftFactorIdAndRoleId(Long softFactorId, Long roleId);
 
     @Override
     <S extends Question> S save(S entity);

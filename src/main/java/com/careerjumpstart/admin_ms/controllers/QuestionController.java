@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.PreUpdate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,12 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.FOUND)
     public Optional <List<Question>> getQuestionsBySoftFactorId(@RequestParam Long softFactorId){
         return questionService.findBySoftFactorId(softFactorId);
+    }
+
+    @GetMapping(path = "/", params = {"softFactorId", "roleId"})
+    @ResponseStatus(HttpStatus.FOUND)
+    public Optional <List<Question>> getQuestionsByRoleId(@RequestParam Long softFactorId, @RequestParam Long roleId){
+        return questionService.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
     }
 
     @PostMapping(path="/")

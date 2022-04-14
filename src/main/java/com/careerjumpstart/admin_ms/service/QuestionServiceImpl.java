@@ -34,6 +34,11 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
+    public Optional <List<Question>> findAllBySoftFactorIdAndRoleId(Long softFactorId, Long roleId){
+        return this.questionRepo.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
+    }
+
+    @Override
     public Question createQuestion(Question q) {
         return questionRepo.save(q);
     }
