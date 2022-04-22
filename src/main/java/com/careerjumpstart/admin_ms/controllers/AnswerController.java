@@ -1,12 +1,14 @@
 package com.careerjumpstart.admin_ms.controllers;
 
 import com.careerjumpstart.admin_ms.models.Answer;
+import com.careerjumpstart.admin_ms.security.JwtUtils;
 import com.careerjumpstart.admin_ms.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,9 @@ import java.util.Optional;
 public class AnswerController {
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -32,13 +37,29 @@ public class AnswerController {
 
     @GetMapping(params = "questionId")
     @ResponseStatus(HttpStatus.FOUND)
-    public Optional<Answer> getByQuestionId(@RequestParam Long questionId){
+    public Optional<List<Answer>> getByQuestionId(@RequestParam Long questionId){
         return answerService.findByQuestionId(questionId);
     }
 
+    @GetMapping(params = "username")
+    @ResponseStatus(HttpStatus.FOUND)
+    public Optional<List<Answer>> getByUsername(@RequestParam String username){
+        return answerService.findByUsername(username);
+    }
+
     @PostMapping
-    public Answer postAnswer(@RequestBody Answer answer){
-        return answerService.createAnswer(answer);
+    public Answer postAnswer(@RequestBody Answer answer, HttpServletRequest request){
+        String jwt = jwtUtils.getJwtFromCookies(request);
+        if (jwtUtils.validateJwtToken(jwt)) {
+            String username = jwtUtils.getUserNameFromJwtToken(jwt);
+            if((answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId())).isPresent()) {
+                System.out.println("enters");
+                return null;
+            }
+            answer.setUsername(username);
+            return answerService.createAnswer(answer);
+        }
+        return null;
     }
 
     @PutMapping(path="{id}")

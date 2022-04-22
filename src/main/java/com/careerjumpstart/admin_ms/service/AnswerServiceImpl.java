@@ -31,8 +31,18 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Optional<Answer> findByQuestionId(Long questionId) {
+    public Optional<List<Answer>> findByQuestionId(Long questionId) {
         return answerRepo.findAnswerByQuestionId(questionId);
+    }
+
+    @Override
+    public Optional<List<Answer>> findByUsername(String username) {
+        return answerRepo.findAnswerByUsername(username);
+    }
+
+    @Override
+    public Optional<Answer> findByUsernameAndQuestionId(String username, Long questionId) {
+        return answerRepo.findAnswerByUsernameAndQuestionId(username, questionId);
     }
 
     @Override

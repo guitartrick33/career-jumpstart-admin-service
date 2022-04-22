@@ -26,6 +26,6 @@ public class Answer {
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "username")
+    private String username;
 }
