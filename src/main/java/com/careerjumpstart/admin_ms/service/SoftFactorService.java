@@ -12,4 +12,5 @@ public interface SoftFactorService {
     SoftFactor createSoftFactor(SoftFactor s);
     SoftFactor updateSoftFactor(Long id, SoftFactor s);
     void deleteSoftFactor(Long id);
+    boolean exists(Long id);
 }

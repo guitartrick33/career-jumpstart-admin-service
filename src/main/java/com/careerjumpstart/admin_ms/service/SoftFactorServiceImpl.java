@@ -50,4 +50,9 @@ public class SoftFactorServiceImpl implements SoftFactorService{
     public void deleteSoftFactor(Long id) {
         softFactorRepo.deleteById(id);
     }
+
+    @Override
+    public boolean exists(Long id) {
+        return softFactorRepo.existsById(id);
+    }
 }

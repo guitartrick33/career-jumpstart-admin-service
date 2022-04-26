@@ -1,10 +1,13 @@
 package com.careerjumpstart.admin_ms.controllers;
 
 import com.careerjumpstart.admin_ms.models.SoftFactor;
+import com.careerjumpstart.admin_ms.payload.response.ResponseWithMessage;
 import com.careerjumpstart.admin_ms.service.SoftFactorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,30 +23,79 @@ public class SoftFactorController {
     private SoftFactorService softFactorService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<SoftFactor> getAll(){
-        return softFactorService.findAll();
+    public ResponseEntity<ResponseWithMessage<List<SoftFactor>>> getAll(){
+        List<SoftFactor> results;
+        try {
+            results = softFactorService.findAll();
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        if(results.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No soft factors found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
+        }
     }
 
     @GetMapping(path = "{id}")
-    @ResponseStatus(HttpStatus.FOUND)
-    public Optional<SoftFactor> getById(@PathVariable Long id){
-        return softFactorService.findById(id);
+    public ResponseEntity<ResponseWithMessage<Optional<SoftFactor>>> getById(@PathVariable Long id){
+        Optional<SoftFactor> result;
+        try {
+            result = softFactorService.findById(id);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        if(result.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factor not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(result, null), HttpStatus.OK);
+
+        }
     }
 
-
     @PostMapping
-    public SoftFactor postSoftFactor(@RequestBody SoftFactor softFactor){
-        return softFactorService.createSoftFactor(softFactor);
+    public ResponseEntity<ResponseWithMessage<SoftFactor>> postSoftFactor(@RequestBody SoftFactor softFactor){
+        try {
+            SoftFactor newSoftFactor = softFactorService.createSoftFactor(softFactor);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newSoftFactor, "Soft factor successfully created"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(path="{id}")
-    public SoftFactor editSoftFactor(@RequestBody SoftFactor softFactor, @PathVariable Long id){
-        return softFactorService.updateSoftFactor(id,softFactor);
+    public ResponseEntity<ResponseWithMessage<SoftFactor>> editSoftFactor(@RequestBody SoftFactor softFactor, @PathVariable Long id){
+        try {
+            if(softFactorService.exists(id)) {
+                SoftFactor updatedSoftFactor = softFactorService.updateSoftFactor(id, softFactor);
+                return new ResponseEntity<>(new ResponseWithMessage<>(updatedSoftFactor, "Soft factor successfully updated"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factor not found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path="{id}")
-    public void deleteSoftFactor(@PathVariable Long id){
-        softFactorService.deleteSoftFactor(id);
+    public ResponseEntity<ResponseWithMessage<SoftFactor>> deleteSoftFactor(@PathVariable Long id){
+        try {
+            if(softFactorService.exists(id)) {
+                softFactorService.deleteSoftFactor(id);
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factor successfully deleted"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factor not found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }
