@@ -24,6 +24,7 @@ public class SoftFactorController {
 
     @GetMapping
     public ResponseEntity<ResponseWithMessage<List<SoftFactor>>> getAll(){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         List<SoftFactor> results;
         try {
             results = softFactorService.findAll();
@@ -42,6 +43,7 @@ public class SoftFactorController {
 
     @GetMapping(path = "{id}")
     public ResponseEntity<ResponseWithMessage<Optional<SoftFactor>>> getById(@PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         Optional<SoftFactor> result;
         try {
             result = softFactorService.findById(id);
@@ -60,6 +62,7 @@ public class SoftFactorController {
 
     @PostMapping
     public ResponseEntity<ResponseWithMessage<SoftFactor>> postSoftFactor(@RequestBody SoftFactor softFactor){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             SoftFactor newSoftFactor = softFactorService.createSoftFactor(softFactor);
             return new ResponseEntity<>(new ResponseWithMessage<>(newSoftFactor, "Soft factor successfully created"), HttpStatus.OK);
@@ -72,6 +75,7 @@ public class SoftFactorController {
 
     @PutMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<SoftFactor>> editSoftFactor(@RequestBody SoftFactor softFactor, @PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             if(softFactorService.exists(id)) {
                 SoftFactor updatedSoftFactor = softFactorService.updateSoftFactor(id, softFactor);
@@ -88,6 +92,7 @@ public class SoftFactorController {
 
     @DeleteMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<SoftFactor>> deleteSoftFactor(@PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             if(softFactorService.exists(id)) {
                 softFactorService.deleteSoftFactor(id);

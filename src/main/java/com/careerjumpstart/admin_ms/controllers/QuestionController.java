@@ -24,6 +24,7 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity<ResponseWithMessage<List<Question>>> getAll(){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         List<Question> results;
         try {
             results = questionService.findAll();
@@ -42,6 +43,7 @@ public class QuestionController {
 
     @GetMapping(path = "{id}")
     public ResponseEntity<ResponseWithMessage<Optional<Question>>> getById(@PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         Optional<Question> result;
         try {
             result = questionService.findById(id);
@@ -60,6 +62,7 @@ public class QuestionController {
 
     @GetMapping(params = "softFactorId")
     public ResponseEntity<ResponseWithMessage<List<Question>>> getQuestionsBySoftFactorId(@RequestParam Long softFactorId){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         List<Question> results;
         try {
             results = questionService.findBySoftFactorId(softFactorId);
@@ -78,6 +81,7 @@ public class QuestionController {
 
     @GetMapping(params = {"softFactorId", "roleId"})
     public ResponseEntity<ResponseWithMessage<List<Question>>> getQuestionsByRoleId(@RequestParam Long softFactorId, @RequestParam Long roleId){
+        // TODO: Authorize the user who is requesting this action is registered (& logged in)
         List<Question> results;
         try {
             results = questionService.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
@@ -96,6 +100,7 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity<ResponseWithMessage<Question>> postQuestion(@RequestBody Question question){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             Question newQuestion = questionService.createQuestion(question);
             return new ResponseEntity<>(new ResponseWithMessage<>(newQuestion, "Question successfully created"), HttpStatus.OK);
@@ -108,6 +113,7 @@ public class QuestionController {
 
     @PutMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Question>> editQuestion(@RequestBody Question question, @PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             if(questionService.exists(id)) {
                 Question updatedQuestion = questionService.updateQuestion(id, question);
@@ -124,6 +130,7 @@ public class QuestionController {
 
     @DeleteMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Question>> deleteQuestion(@PathVariable Long id){
+        // TODO: Authorize the user who is requesting this action has role admin
         try {
             if(questionService.exists(id)) {
                 questionService.deleteQuestion(id);
