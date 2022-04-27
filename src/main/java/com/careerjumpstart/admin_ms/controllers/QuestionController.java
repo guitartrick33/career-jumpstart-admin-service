@@ -1,10 +1,13 @@
 package com.careerjumpstart.admin_ms.controllers;
 
 import com.careerjumpstart.admin_ms.models.Question;
+import com.careerjumpstart.admin_ms.payload.response.ResponseWithMessage;
 import com.careerjumpstart.admin_ms.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,41 +23,118 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Question> getAll(){
-        return questionService.findAll();
+    public ResponseEntity<ResponseWithMessage<List<Question>>> getAll(){
+        List<Question> results;
+        try {
+            results = questionService.findAll();
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(results.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
+        }
     }
 
     @GetMapping(path = "{id}")
-    @ResponseStatus(HttpStatus.FOUND)
-    public Optional<Question> getById(@PathVariable Long id){
-        return questionService.findById(id);
+    public ResponseEntity<ResponseWithMessage<Optional<Question>>> getById(@PathVariable Long id){
+        Optional<Question> result;
+        try {
+            result = questionService.findById(id);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Question repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(result.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Question not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(result, null), HttpStatus.OK);
+        }
     }
 
     @GetMapping(params = "softFactorId")
-    @ResponseStatus(HttpStatus.FOUND)
-    public Optional <List<Question>> getQuestionsBySoftFactorId(@RequestParam Long softFactorId){
-        return questionService.findBySoftFactorId(softFactorId);
+    public ResponseEntity<ResponseWithMessage<List<Question>>> getQuestionsBySoftFactorId(@RequestParam Long softFactorId){
+        List<Question> results;
+        try {
+            results = questionService.findBySoftFactorId(softFactorId);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(results.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
+        }
     }
 
     @GetMapping(params = {"softFactorId", "roleId"})
-    @ResponseStatus(HttpStatus.FOUND)
-    public Optional <List<Question>> getQuestionsByRoleId(@RequestParam Long softFactorId, @RequestParam Long roleId){
-        return questionService.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
+    public ResponseEntity<ResponseWithMessage<List<Question>>> getQuestionsByRoleId(@RequestParam Long softFactorId, @RequestParam Long roleId){
+        List<Question> results;
+        try {
+            results = questionService.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(results.isEmpty()) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor and role"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
+        }
     }
 
     @PostMapping
-    public Question postQuestion(@RequestBody Question question){
-        return questionService.createQuestion(question);
+    public ResponseEntity<ResponseWithMessage<Question>> postQuestion(@RequestBody Question question){
+        try {
+            Question newQuestion = questionService.createQuestion(question);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newQuestion, "Question successfully created"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping(path="{id}")
-    public Question editQuestion(@RequestBody Question question, @PathVariable Long id){
-        return questionService.updateQuestion(id,question);
+    public ResponseEntity<ResponseWithMessage<Question>> editQuestion(@RequestBody Question question, @PathVariable Long id){
+        try {
+            if(questionService.exists(id)) {
+                Question updatedQuestion = questionService.updateQuestion(id, question);
+                return new ResponseEntity<>(new ResponseWithMessage<>(updatedQuestion, "Question successfully updated"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Question not found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping(path="{id}")
-    public void deleteQuestion(@PathVariable Long id){
-       questionService.deleteQuestion(id);
+    public ResponseEntity<ResponseWithMessage<Question>> deleteQuestion(@PathVariable Long id){
+        try {
+            if(questionService.exists(id)) {
+                questionService.deleteQuestion(id);
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Question successfully deleted"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Question not found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Questions repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

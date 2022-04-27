@@ -10,10 +10,11 @@ import java.util.Optional;
 public interface AnswerService {
     List<Answer> findAll();
     Optional<Answer> findById(Long id);
-    Optional<List<Answer>> findByQuestionId(Long questionId);
-    Optional<List<Answer>> findByUsername(String username);
+    List<Answer> findByQuestionId(Long questionId);
+    List<Answer> findByUsername(String username);
     Optional<Answer> findByUsernameAndQuestionId(String username, Long questionId);
     Answer createAnswer(Answer a);
     Answer updateAnswer(Long id, Answer a);
     void deleteAnswer(Long id);
+    boolean exists(Long id);
 }

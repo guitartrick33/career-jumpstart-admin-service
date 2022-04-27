@@ -29,6 +29,8 @@ public class SoftFactorController {
             results = softFactorService.findAll();
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(results.isEmpty()) {
@@ -45,13 +47,14 @@ public class SoftFactorController {
             result = softFactorService.findById(id);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(result.isEmpty()) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factor not found"), HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(new ResponseWithMessage<>(result, null), HttpStatus.OK);
-
         }
     }
 
@@ -63,7 +66,7 @@ public class SoftFactorController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -79,7 +82,7 @@ public class SoftFactorController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -95,7 +98,7 @@ public class SoftFactorController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Soft factors repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

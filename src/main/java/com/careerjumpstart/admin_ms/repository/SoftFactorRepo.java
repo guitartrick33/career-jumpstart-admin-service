@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface SoftFactorRepo extends JpaRepository<SoftFactor, Long> {
     @Override
     List<SoftFactor> findAll();
-
-//    Optional<SoftFactor> findSoftFactorById(Long id);
     Optional<SoftFactor> findSoftFactorById(Long id);
 
     @Override

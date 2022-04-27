@@ -1,9 +1,7 @@
 package com.careerjumpstart.admin_ms.service;
 
 import com.careerjumpstart.admin_ms.models.Answer;
-import com.careerjumpstart.admin_ms.models.Question;
 import com.careerjumpstart.admin_ms.repository.AnswerRepo;
-import com.careerjumpstart.admin_ms.repository.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +29,12 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Optional<List<Answer>> findByQuestionId(Long questionId) {
+    public List<Answer> findByQuestionId(Long questionId) {
         return answerRepo.findAnswerByQuestionId(questionId);
     }
 
     @Override
-    public Optional<List<Answer>> findByUsername(String username) {
+    public List<Answer> findByUsername(String username) {
         return answerRepo.findAnswerByUsername(username);
     }
 
@@ -66,5 +64,10 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public void deleteAnswer(Long id) {
         answerRepo.deleteById(id);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return answerRepo.existsById(id);
     }
 }

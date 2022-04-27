@@ -29,13 +29,13 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Optional <List<Question>> findBySoftFactorId(Long softFactorId) {
+    public List<Question> findBySoftFactorId(Long softFactorId) {
         return questionRepo.findAllBySoftFactorId(softFactorId);
     }
 
     @Override
-    public Optional <List<Question>> findAllBySoftFactorIdAndRoleId(Long softFactorId, Long roleId){
-        return this.questionRepo.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
+    public List<Question> findAllBySoftFactorIdAndRoleId(Long softFactorId, Long roleId){
+        return questionRepo.findAllBySoftFactorIdAndRoleId(softFactorId, roleId);
     }
 
     @Override
@@ -48,6 +48,9 @@ public class QuestionServiceImpl implements QuestionService{
         Optional<Question> question = findById(id);
         if(question.isPresent()){
             question.get().setContent(q.getContent());
+            question.get().setRoleId(q.getRoleId());
+            question.get().setSoftFactor(q.getSoftFactor());
+            question.get().setType(q.getType());
             return questionRepo.save(question.get());
         }
         else
@@ -59,6 +62,11 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public void deleteQuestion(Long id) {
         questionRepo.deleteById(id);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return questionRepo.existsById(id);
     }
 
 
