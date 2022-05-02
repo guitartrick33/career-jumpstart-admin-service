@@ -1,5 +1,6 @@
 package com.careerjumpstart.admin_ms.controllers;
 
+import com.careerjumpstart.admin_ms.Client;
 import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.payload.response.ResponseWithMessage;
 import com.careerjumpstart.admin_ms.security.JwtUtils;
@@ -18,13 +19,33 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-@RequestMapping("/answer")
+
+//TODO: rename this to /answers
+@RequestMapping("/answers")
 public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private Client client;
+
+
+//    @Autowired
+//    JwtUtils jwtUtils;
+
+    @GetMapping(path = "testcookie")
+    @ResponseStatus(HttpStatus.OK)
+    public String getAllWithAdminAcess(@CookieValue(name="bezkoder") String cookie){
+        Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
+        return response.toString() + " testcookie";
+    }
+
+    @GetMapping(path = "testyola")
+    @ResponseStatus(HttpStatus.OK)
+    public String getAllWithAdminAcess2(@CookieValue(name="bezkoder") String cookie){
+        Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
+        return response.toString() + " testyola";
+    }
 
     @GetMapping
     public ResponseEntity<ResponseWithMessage<List<Answer>>> getAll(){
