@@ -3,7 +3,6 @@ package com.careerjumpstart.admin_ms.controllers;
 import com.careerjumpstart.admin_ms.Client;
 import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.payload.response.ResponseWithMessage;
-import com.careerjumpstart.admin_ms.security.JwtUtils;
 import com.careerjumpstart.admin_ms.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 
-//TODO: rename this to /answers
-@RequestMapping("/answers")
+@RequestMapping("/admin/answers")
 public class AnswerController {
     @Autowired
     private AnswerService answerService;
@@ -29,9 +26,6 @@ public class AnswerController {
     @Autowired
     private Client client;
 
-
-//    @Autowired
-//    JwtUtils jwtUtils;
 
     @GetMapping(path = "testcookie")
     @ResponseStatus(HttpStatus.OK)
@@ -123,27 +117,27 @@ public class AnswerController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@RequestBody Answer answer, HttpServletRequest request){
-        try {
-            String jwt = jwtUtils.getJwtFromCookies(request);
-            if (jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
-                if (result.isPresent()) {
-                    return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
-                }
-                answer.setUsername(username);
-                Answer newAnswer = answerService.createAnswer(answer);
-                return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
-            }
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
-        } catch (DataAccessException e) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@RequestBody Answer answer, HttpServletRequest request){
+//        try {
+//            String jwt = jwtUtils.getJwtFromCookies(request);
+//            if (jwtUtils.validateJwtToken(jwt)) {
+//                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+//                Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
+//                if (result.isPresent()) {
+//                    return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
+//                }
+//                answer.setUsername(username);
+//                Answer newAnswer = answerService.createAnswer(answer);
+//                return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
+//        } catch (DataAccessException e) {
+//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @PutMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Answer>> editAnswer(@RequestBody Answer answer, @PathVariable Long id){
