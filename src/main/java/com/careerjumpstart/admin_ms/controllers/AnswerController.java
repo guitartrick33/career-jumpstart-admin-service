@@ -117,27 +117,26 @@ public class AnswerController {
         }
     }
 
-//    @PostMapping
-//    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@RequestBody Answer answer, HttpServletRequest request){
-//        try {
-//            String jwt = jwtUtils.getJwtFromCookies(request);
-//            if (jwtUtils.validateJwtToken(jwt)) {
-//                String username = jwtUtils.getUserNameFromJwtToken(jwt);
-//                Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
-//                if (result.isPresent()) {
-//                    return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
-//                }
-//                answer.setUsername(username);
-//                Answer newAnswer = answerService.createAnswer(answer);
-//                return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
-//            }
-//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
-//        } catch (DataAccessException e) {
-//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@CookieValue(name="bezkoder") String cookie, @RequestBody Answer answer){
+        try {
+            String username = (String) client.sendMessageAndReceiveResponse(cookie, "roytuts");
+            if(username == null) {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
+            }
+            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
+            if (result.isPresent()) {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
+            }
+            answer.setUsername(username);
+            Answer newAnswer = answerService.createAnswer(answer);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PutMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Answer>> editAnswer(@RequestBody Answer answer, @PathVariable Long id){
