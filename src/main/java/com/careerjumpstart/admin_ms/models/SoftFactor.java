@@ -28,5 +28,4 @@ public class SoftFactor {
     @JsonIgnore
     @OneToMany(mappedBy = "id",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Question> questions;
-
 }
