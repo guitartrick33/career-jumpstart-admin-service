@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-@RequestMapping("/softfactor")
+@RequestMapping("/admin/softfactor")
 public class SoftFactorController {
 
     @Autowired

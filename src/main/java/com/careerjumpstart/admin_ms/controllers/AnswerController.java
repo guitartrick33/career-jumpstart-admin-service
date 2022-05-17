@@ -1,8 +1,8 @@
 package com.careerjumpstart.admin_ms.controllers;
 
+import com.careerjumpstart.admin_ms.Client;
 import com.careerjumpstart.admin_ms.models.Answer;
 import com.careerjumpstart.admin_ms.payload.response.ResponseWithMessage;
-import com.careerjumpstart.admin_ms.security.JwtUtils;
 import com.careerjumpstart.admin_ms.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +11,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-@RequestMapping("/answer")
+
+@RequestMapping("/admin/answers")
 public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private Client client;
+
+
+    @GetMapping(path = "testcookie")
+    @ResponseStatus(HttpStatus.OK)
+    public String getAllWithAdminAcess(@CookieValue(name="bezkoder") String cookie){
+        Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
+        return response.toString() + " testcookie";
+    }
+
+    @GetMapping(path = "testyola")
+    @ResponseStatus(HttpStatus.OK)
+    public String getAllWithAdminAcess2(@CookieValue(name="bezkoder") String cookie){
+        Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
+        return response.toString() + " testyola";
+    }
 
     @GetMapping
     public ResponseEntity<ResponseWithMessage<List<Answer>>> getAll(){
@@ -103,20 +118,19 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@RequestBody Answer answer, HttpServletRequest request){
+    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@CookieValue(name="bezkoder") String cookie, @RequestBody Answer answer){
         try {
-            String jwt = jwtUtils.getJwtFromCookies(request);
-            if (jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
-                if (result.isPresent()) {
-                    return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
-                }
-                answer.setUsername(username);
-                Answer newAnswer = answerService.createAnswer(answer);
-                return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
+            String username = (String) client.sendMessageAndReceiveResponse(cookie, "roytuts");
+            if(username == null) {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
+            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
+            if (result.isPresent()) {
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
+            }
+            answer.setUsername(username);
+            Answer newAnswer = answerService.createAnswer(answer);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
