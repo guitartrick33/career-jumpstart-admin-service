@@ -5,6 +5,7 @@ import com.careerjumpstart.admin_ms.repository.AnswerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,31 +45,46 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Answer createAnswer(Answer a) {
-        return answerRepo.save(a);
-    }
-
-    @Override
     public List<Answer> saveAnswers(List<Answer> answers) {
         return answerRepo.saveAll(answers);
     }
 
     @Override
+    public List<Answer> updateAnswers(List<Answer> answers) {
+        List<Answer> answersToUpdate = new ArrayList<>();
+        for(Answer answer : answers) {
+            Optional<Answer> answerDB = findById(answer.getId());
+            if(answerDB.isPresent()) {
+                Answer answerToUpdate = answerDB.get();
+                answerToUpdate.setContent(answer.getContent());
+                answersToUpdate.add(answerToUpdate);
+            }
+        }
+        return answerRepo.saveAll(answersToUpdate);
+    }
+
+    @Override
     public Answer updateAnswer(Long id, Answer a) {
         Optional<Answer> answer = findById(id);
-        if(answer.isPresent()){
-            answer.get().setContent(a.getContent());
-            return answerRepo.save(answer.get());
-        }
-        else
-        {
-            return null;
-        }
+        answer.get().setContent(a.getContent());
+        return answerRepo.save(answer.get());
     }
 
     @Override
     public void deleteAnswer(Long id) {
         answerRepo.deleteById(id);
+    }
+
+    @Override
+    public void deleteAnswers(List<Answer> answers) {
+        List<Answer> answersToDelete = new ArrayList<>();
+        for(Answer answer : answers) {
+            Optional<Answer> answerDB = findById(answer.getId());
+            if(answerDB.isPresent()) {
+                answersToDelete.add(answerDB.get());
+            }
+        }
+        answerRepo.deleteAll(answersToDelete);
     }
 
     @Override

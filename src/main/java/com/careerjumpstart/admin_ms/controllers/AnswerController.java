@@ -157,6 +157,20 @@ public class AnswerController {
         }
     }
 
+    @PutMapping()
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> editAnswers(@RequestBody List<Answer> answers){
+        // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
+        try {
+            List<Answer> updatedAnswers = answerService.updateAnswers(answers);
+            return new ResponseEntity<>(new ResponseWithMessage<>(updatedAnswers, "Answers successfully updated"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Answer>> deleteAnswer(@PathVariable Long id){
         // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
@@ -170,6 +184,20 @@ public class AnswerController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> deleteAnswers(@RequestBody List<Answer> answers){
+        // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
+        try {
+            answerService.deleteAnswers(answers);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers successfully deleted"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
