@@ -14,6 +14,7 @@ public interface AnswerService {
     List<Answer> findByUsername(String username);
     Optional<Answer> findByUsernameAndQuestionId(String username, Long questionId);
     Answer createAnswer(Answer a);
+    List<Answer> saveAnswers(List<Answer> answers);
     Answer updateAnswer(Long id, Answer a);
     void deleteAnswer(Long id);
     boolean exists(Long id);

@@ -49,6 +49,11 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
+    public List<Answer> saveAnswers(List<Answer> answers) {
+        return answerRepo.saveAll(answers);
+    }
+
+    @Override
     public Answer updateAnswer(Long id, Answer a) {
         Optional<Answer> answer = findById(id);
         if(answer.isPresent()){

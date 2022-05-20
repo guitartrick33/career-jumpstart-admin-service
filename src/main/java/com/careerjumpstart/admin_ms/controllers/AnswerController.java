@@ -118,19 +118,20 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@CookieValue(name="bezkoder") String cookie, @RequestBody Answer answer){
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> postAnswers(@CookieValue(name="bezkoder") String cookie, @RequestBody List<Answer> answers){
         try {
             String username = (String) client.sendMessageAndReceiveResponse(cookie, "roytuts");
             if(username == null) {
                 return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
             }
-            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
-            if (result.isPresent()) {
-                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
-            }
-            answer.setUsername(username);
-            Answer newAnswer = answerService.createAnswer(answer);
-            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
+//            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, (long) 4);
+//            System.out.println("res" + result);
+//            if (result.isPresent()) {
+//                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, you have already filled in this questionnaire!"), HttpStatus.CONFLICT);
+//            }
+            answers.forEach(a -> a.setUsername(username));
+            List<Answer> newAnswers = answerService.saveAnswers(answers);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswers, "Answers successfully saved"), HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
