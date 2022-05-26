@@ -124,11 +124,6 @@ public class AnswerController {
             if(username == null) {
                 return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
             }
-//            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, (long) 4);
-//            System.out.println("res" + result);
-//            if (result.isPresent()) {
-//                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, you have already filled in this questionnaire!"), HttpStatus.CONFLICT);
-//            }
             answers.forEach(a -> a.setUsername(username));
             List<Answer> newAnswers = answerService.saveAnswers(answers);
             return new ResponseEntity<>(new ResponseWithMessage<>(newAnswers, "Answers successfully saved"), HttpStatus.OK);
