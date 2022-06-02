@@ -126,6 +126,9 @@ public class AnswerController {
             }
             answers.forEach(a -> a.setUsername(username));
             List<Answer> newAnswers = answerService.saveAnswers(answers);
+            if(newAnswers.isEmpty()){
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers not filled"), HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(new ResponseWithMessage<>(newAnswers, "Answers successfully saved"), HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);

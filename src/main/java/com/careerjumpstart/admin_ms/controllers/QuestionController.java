@@ -73,7 +73,7 @@ public class QuestionController {
         }
 
         if(results.isEmpty()) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
         }
