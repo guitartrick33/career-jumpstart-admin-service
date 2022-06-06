@@ -13,8 +13,10 @@ public interface AnswerService {
     List<Answer> findByQuestionId(Long questionId);
     List<Answer> findByUsername(String username);
     Optional<Answer> findByUsernameAndQuestionId(String username, Long questionId);
-    Answer createAnswer(Answer a);
+    List<Answer> saveAnswers(List<Answer> answers);
     Answer updateAnswer(Long id, Answer a);
+    List<Answer> updateAnswers(List<Answer> answers);
     void deleteAnswer(Long id);
+    void deleteAnswers(List<Answer> answers);
     boolean exists(Long id);
 }

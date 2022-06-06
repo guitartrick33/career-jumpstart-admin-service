@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RequiredArgsConstructor
 
 @RequestMapping("/admin/answers")
@@ -118,19 +118,18 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWithMessage<Answer>> postAnswer(@CookieValue(name="bezkoder") String cookie, @RequestBody Answer answer){
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> postAnswers(@CookieValue(name="bezkoder") String cookie, @RequestBody List<Answer> answers){
         try {
             String username = (String) client.sendMessageAndReceiveResponse(cookie, "roytuts");
             if(username == null) {
                 return new ResponseEntity<>(new ResponseWithMessage<>(null, "You are unauthorized for this action"), HttpStatus.UNAUTHORIZED);
             }
-            Optional<Answer> result = answerService.findByUsernameAndQuestionId(username, answer.getQuestion().getId());
-            if (result.isPresent()) {
-                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Sorry, question is already answered"), HttpStatus.CONFLICT);
+            answers.forEach(a -> a.setUsername(username));
+            List<Answer> newAnswers = answerService.saveAnswers(answers);
+            if(newAnswers.isEmpty()){
+                return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers not filled"), HttpStatus.BAD_REQUEST);
             }
-            answer.setUsername(username);
-            Answer newAnswer = answerService.createAnswer(answer);
-            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswer, "Answer successfully created"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWithMessage<>(newAnswers, "Answers successfully saved"), HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
@@ -156,6 +155,20 @@ public class AnswerController {
         }
     }
 
+    @PutMapping()
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> editAnswers(@RequestBody List<Answer> answers){
+        // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
+        try {
+            List<Answer> updatedAnswers = answerService.updateAnswers(answers);
+            return new ResponseEntity<>(new ResponseWithMessage<>(updatedAnswers, "Answers successfully updated"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping(path="{id}")
     public ResponseEntity<ResponseWithMessage<Answer>> deleteAnswer(@PathVariable Long id){
         // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
@@ -169,6 +182,20 @@ public class AnswerController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<ResponseWithMessage<List<Answer>>> deleteAnswers(@RequestBody List<Answer> answers){
+        // TODO: Authorize the user who created the answer is the same as this one requesting this action & exists in the database
+        try {
+            answerService.deleteAnswers(answers);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers successfully deleted"), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "Answers repository not responding"), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(new ResponseWithMessage<>(null, "Something went wrong..."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

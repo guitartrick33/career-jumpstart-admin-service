@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RequiredArgsConstructor
 @RequestMapping("/admin/question")
 public class QuestionController {
@@ -73,7 +73,7 @@ public class QuestionController {
         }
 
         if(results.isEmpty()) {
-            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseWithMessage<>(null, "No questions found for this soft factor"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ResponseWithMessage<>(results, null), HttpStatus.OK);
         }
