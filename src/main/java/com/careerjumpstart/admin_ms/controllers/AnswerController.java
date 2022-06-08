@@ -28,18 +28,18 @@ public class AnswerController {
     private Client client;
 
 
-    @GetMapping(path = "testcookie")
+    @GetMapping(path = "testrabbitmq")
     @ResponseStatus(HttpStatus.OK)
-    public String getAllWithAdminAcess(@CookieValue(name="bezkoder") String cookie){
-        Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
-        return response.toString() + " testcookie";
+    public String testRabbitMqOnly(@CookieValue(name="bezkoder") String cookie){
+        Object response = client.sendMessageAndReceiveResponse(cookie, "test");
+        return response.toString();
     }
 
-    @GetMapping(path = "testyola")
+    @GetMapping(path = "testdbrabbitmq")
     @ResponseStatus(HttpStatus.OK)
-    public String getAllWithAdminAcess2(@CookieValue(name="bezkoder") String cookie){
+    public String testRabbitMqWithDatabase(@CookieValue(name="bezkoder") String cookie){
         Object response = client.sendMessageAndReceiveResponse(cookie, "roytuts");
-        return response.toString() + " testyola";
+        return response.toString();
     }
 
     @GetMapping
