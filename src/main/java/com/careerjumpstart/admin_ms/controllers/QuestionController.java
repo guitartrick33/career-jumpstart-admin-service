@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://careerjumpapp.com"}, maxAge = 3600, allowCredentials = "true")
 @RequiredArgsConstructor
 @RequestMapping("/admin/question")
 public class QuestionController {
