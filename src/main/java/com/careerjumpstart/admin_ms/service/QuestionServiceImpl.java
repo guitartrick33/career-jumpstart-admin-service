@@ -48,9 +48,9 @@ public class QuestionServiceImpl implements QuestionService{
         Optional<Question> question = findById(id);
         if(question.isPresent()){
             question.get().setContent(q.getContent());
-            question.get().setRoleId(q.getRoleId());
-            question.get().setSoftFactor(q.getSoftFactor());
-            question.get().setType(q.getType());
+//            question.get().setRoleId(q.getRoleId());
+//            question.get().setSoftFactor(q.getSoftFactor());
+//            question.get().setType(q.getType());
             return questionRepo.save(question.get());
         }
         else
